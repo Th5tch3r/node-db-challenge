@@ -1,7 +1,20 @@
-const server = require("./server.js");
+const express = require("express");
+const helmet = require("helmet");
 
-const PORT = process.env.PORT || 8080;
+const ProjectRouter = require("./projects/projects-router");
+const ResourceRouter = require("./resources/resources-router");
 
-server.listen(PORT, () => {
-  console.log(`This server in alive in ${PORT}`);
+const server = express();
+
+//initial GET
+server.get("/", (req, res) => {
+  res.json({ message: "server is up and running" });
 });
+
+server.use(helmet());
+server.use(express.json());
+
+server.use("/api/projects", ProjectRouter);
+server.use("/api/resources", ResourceRouter);
+
+module.exports = server;
